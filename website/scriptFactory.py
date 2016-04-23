@@ -1,6 +1,12 @@
 from datetime import date, datetime
 
+"""Generate custom script
+https://en.wikibooks.org/wiki/Celestia/Scripting
+"""
 def makeScript(shipName="ORBIT", beginDate=date.today().year):
+	if (beginDate==date.today().year):
+		beginDate = str(beginDate) +'-01-01T00:01:24.0000'+'"}\n'
+
 	script = [
 	'{\n',
 		'time{utc "2015-01-01T00:01:24.0000"}\n',
@@ -12,10 +18,7 @@ def makeScript(shipName="ORBIT", beginDate=date.today().year):
 	'}'
 	]
 	#set new begin date
-	if (beginDate==date.today().year): #case when begin param default
-		script[1] = 'time{utc "' + str(beginDate) +'-01-01T00:01:24.0000'+'"}\n'
-	else:
-		script[1] = 'time{utc "' + str(beginDate) + '"}\n'
+	script[1] = 'time{utc "' + str(beginDate) + '"}\n'
 
 	#set new ship object
 	script[2] = 'select{object "' + str(shipName) + '"}\n'
@@ -25,7 +28,14 @@ def makeScript(shipName="ORBIT", beginDate=date.today().year):
 		f.write(line)
 	return script
 
+"""Generate ssc script 
+https://en.wikibooks.org/wiki/Celestia/SSC_File
+"""
 def makeSSCScript(shipName="ORBIT",beginDate=date.today().year, endDate=date.today().year+1):
+	if (beginDate==date.today().year):
+		beginDate = str(beginDate) +'-01-01T00:01:24.0000'+'"}\n'
+		endDate = str(endDate)+ '-01-01T00:01:24.0000'+'"}\n'
+
 	scriptSSC = [
 	'"Orbit-test-spacecraft" "Sol"\n',
 	'{\n',
@@ -49,12 +59,8 @@ def makeSSCScript(shipName="ORBIT",beginDate=date.today().year, endDate=date.tod
 	#set new begin/end date
 
 	#when end/begin default
-	if (beginDate == date.today().year and endDate == beginDate+1):
-		scriptSSC[9] = '\tBeginning "' +str(beginDate)+'-01-01T00:01:24.0000"\n'
-		scriptSSC[10] = '\tEnding "' +str(endDate)+'-01-01T00:01:24.0000"\n'
-	else:
-		scriptSSC[9] = '\tBeginning "' +str(beginDate)+'"\n'
-		scriptSSC[10] = '\tEnding "' +str(endDate)+'"\n'
+	scriptSSC[9] = '\tBeginning "' +str(beginDate)+'"\n'
+	scriptSSC[10] = '\tEnding "' +str(endDate)+'"\n'
 
 	f = open("orbit.ssc","w")	
 	for line in scriptSSC:
@@ -62,10 +68,9 @@ def makeSSCScript(shipName="ORBIT",beginDate=date.today().year, endDate=date.tod
 	return scriptSSC
 
 if __name__ == '__main__':
-	makeScript() #return default script
-	makeSSCScript() #return default ssc script
-
+	print makeScript() #return default script
+	print makeSSCScript() #return default ssc script
 	#and some custom scripts
-	makeSSCScript(beginDate="2015 01 01 00:00:00",endDate="2016 01 01 00:00:00",shipName="ORBIT")
-	makeScript(beginDate="2023 02 03 00:00:00")
-	makeScript(shipName="Orbital battlestation Death Star I")
+	print makeSSCScript(beginDate="2015 01 01 00:00:00",endDate="2016 01 01 00:00:00",shipName="ORBIT")
+	print makeScript(beginDate="2023 02 03 00:00:00")
+	print makeScript(shipName="Orbital battlestation Death Star I")
